@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VATC — Backend & DevOps Architecture Wireframe</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.0/index.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: #0a0a0a;
+        color: #e8e8e8;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      :root {
+        --kawasaki: #69be28;
+        --kawasaki-dark: #4a8a1c;
+        --kawasaki-glow: rgba(105, 190, 40, 0.3);
+        --cream: #f5f1e8;
+        --dark: #0a0a0a;
+        --dark-2: #141414;
+        --dark-3: #1f1f1f;
+        --gray: #8a8a8a;
+        --border: rgba(255, 255, 255, 0.08);
+        --free: #69be28;
+        --cheap: #f59e0b;
+        --pro: #3b82f6;
+        --enterprise: #8b5cf6;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--kawasaki);
+        border-radius: 4px;
+      }
+
+      /* ===== TOOLBAR ===== */
+      .devops-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(10, 10, 10, 0.94);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--border);
+        padding: 0;
+      }
+      .devops-toolbar-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .devops-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .devops-brand-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--kawasaki);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-size: 18px;
+      }
+      .devops-brand-text h3 {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+      .devops-brand-text p {
+        font-size: 10px;
+        color: var(--kawasaki);
+        letter-spacing: 2px;
+      }
+      .devops-tabs {
+        display: flex;
+        gap: 4px;
+      }
+      .devops-tab {
+        padding: 10px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray);
+        background: none;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .devops-tab:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .devops-tab.active {
+        color: var(--kawasaki);
+        background: rgba(105, 190, 40, 0.1);
+      }
+      .devops-tab .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gray);
+      }
+      .devops-tab.active .dot {
+        background: var(--kawasaki);
+      }
+
+      /* ===== PAGE ===== */
+      .page {
+        display: none;
+        padding: 40px 24px 80px;
+      }
+      .page.active {
+        display: block;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* ===== PAGE HEADER ===== */
+      .page-header {
+        margin-bottom: 40px;
+        padding: 32px;
+        background: linear-gradient(
+          135deg,
+          rgba(105, 190, 40, 0.08),
+          transparent
+        );
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .page-header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(105, 190, 40, 0.1),
+          transparent 70%
+        );
+      }
+      .page-header .kicker {
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(105, 190, 40, 0.1);
+        border: 1px solid rgba(105, 190, 40, 0.3);
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--kawasaki);
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+      }
+      .page-header h1 {
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 12px;
+        position: relative;
+      }
+      .page-header h1 .accent {
+        color: var(--kawasaki);
+      }
+      .page-header p {
+        color: var(--gray);
+        max-width: 700px;
+        font-size: 15px;
+        position: relative;
+      }
+
+      /* ===== ARCHITECTURE DIAGRAM ===== */
+      .arch-diagram {
+        background: var(--dark-2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 32px;
+        position: relative;
+      }
+      .arch-diagram-label {
+        position: absolute;
+        top: -10px;
+        left: 24px;
+        background: var(--kawasaki);
+        color: #000;
+        padding: 3px 12px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+      .arch-title {
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .arch-title i {
+        color: var(--kawasaki);
+      }
+
+      .arch-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .arch-layer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: var(--dark-3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        transition: all 0.3s;
+      }
+      .arch-layer:hover {
+        border-color: var(--kawasaki);
+        transform: translateX(4px);
+      }
+      .arch-layer-label {
+        min-width: 140px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--kawasaki);
+        text-transform: uppercase;
+      }
+      .arch-layer-items {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+      .arch-item {
+        padding: 8px 14px;
+        background: rgba(105, 190, 40, 0.08);
+        border: 1px solid rgba(105, 190, 40, 0.2);
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+      }
+      .arch-item i {
+        color: var(--kawasaki);
+        font-size: 11px;
+      }
+      .arch-item .tier {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        font-size: 8px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 800;
+      }
+      .tier-free {
+        background: var(--free);
+        color: #000;
+      }
+      .tier-cheap {
+        background: var(--cheap);
+        color: #000;
+      }
+      .tier-pro {
+        background: var(--pro);
+        color: #fff;
+      }
+
+      .arch-connector {
+        display: flex;
+        justify-content: center;
+        padding: 4px 0;
+        color: var(--gray);
+        font-size: 12px;
+      }
+      .arch-connector i {
+        color: var(--kawasaki);
+      }
+
+      /* ===== CATEGORY CARDS ===== */
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 20px;
+      }
+      .cat-card {
+        background: var(--dark-2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+        position: relative;
+        transition: all 0.3s;
+        overflow: hidden;
+      }
+      .cat-card:hover {
+        border-color: var(--kawasaki);
+        transform: translateY(-4px);
+      }
+      .cat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(
+          circle,
+          rgba(105, 190, 40, 0.08),
+          transparent 70%
+        );
+      }
+      .cat-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .cat-num {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(
+          135deg,
+          var(--kawasaki),
+          var(--kawasaki-dark)
+        );
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 800;
+        color: #000;
+        flex-shrink: 0;
+      }
+      .cat-title h3 {
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 2px;
+      }
+      .cat-title p {
+        font-size: 11px;
+        color: var(--gray);
+      }
+      .cat-body {
+        position: relative;
+      }
+      .rec-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .rec {
+        padding: 12px;
+        background: var(--dark-3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.2s;
+      }
+      .rec:hover {
+        border-color: var(--kawasaki);
+      }
+      .rec-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(105, 190, 40, 0.1);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .rec-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .rec-name {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .rec-desc {
+        font-size: 11px;
+        color: var(--gray);
+        line-height: 1.4;
+      }
+      .rec-price {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+      .price-free {
+        background: rgba(105, 190, 40, 0.15);
+        color: var(--kawasaki);
+      }
+      .price-cheap {
+        background: rgba(245, 158, 11, 0.15);
+        color: var(--cheap);
+      }
+      .price-pro {
+        background: rgba(59, 130, 246, 0.15);
+        color: var(--pro);
+      }
+
+      .rec-pick {
+        border: 1px solid var(--kawasaki) !important;
+        background: rgba(105, 190, 40, 0.05);
+      }
+      .rec-pick::before {
+        content: "★ PILIHAN";
+        position: absolute;
+        top: -8px;
+        right: 12px;
+        background: var(--kawasaki);
+        color: #000;
+        font-size: 8px;
+        font-weight: 800;
+        padding: 2px 8px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+      }
+      .rec {
+        position: relative;
+      }
+
+      /* ===== VATC STACK ===== */
+      .vatc-stack {
+        background: linear-gradient(
+          135deg,
+          rgba(105, 190, 40, 0.1),
+          var(--dark-2)
+        );
+        border: 2px solid var(--kawasaki);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+      }
+      .vatc-stack::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(105, 190, 40, 0.15),
+          transparent 70%
+        );
+      }
+      .vatc-stack-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        position: relative;
+      }
+      .vatc-stack-badge {
+        width: 56px;
+        height: 56px;
+        background: var(--kawasaki);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #000;
+      }
+      .vatc-stack-header h2 {
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .vatc-stack-header p {
+        color: var(--gray);
+        font-size: 13px;
+      }
+      .vatc-stack-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        position: relative;
+      }
+      .stack-item {
+        padding: 14px;
+        background: rgba(10, 10, 10, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        transition: all 0.3s;
+      }
+      .stack-item:hover {
+        border-color: var(--kawasaki);
+        background: rgba(105, 190, 40, 0.05);
+      }
+      .stack-item-label {
+        font-size: 9px;
+        color: var(--kawasaki);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        margin-bottom: 4px;
+      }
+      .stack-item-name {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .stack-item-cost {
+        font-size: 11px;
+        color: var(--gray);
+      }
+
+      /* ===== COST BREAKDOWN ===== */
+      .cost-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .cost-card {
+        background: var(--dark-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+      }
+      .cost-card-label {
+        font-size: 10px;
+        color: var(--gray);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .cost-card-value {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--kawasaki);
+        line-height: 1;
+      }
+      .cost-card-sub {
+        font-size: 11px;
+        color: var(--gray);
+        margin-top: 6px;
+      }
+      .cost-card.highlight {
+        background: linear-gradient(
+          135deg,
+          rgba(105, 190, 40, 0.15),
+          rgba(105, 190, 40, 0.05)
+        );
+        border-color: var(--kawasaki);
+      }
+
+      .cost-table-wrap {
+        background: var(--dark-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .cost-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .cost-table th {
+        text-align: left;
+        padding: 14px 16px;
+        background: var(--dark-3);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--gray);
+        border-bottom: 1px solid var(--border);
+      }
+      .cost-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      .cost-table tr:last-child td {
+        border-bottom: none;
+      }
+      .cost-table tr:hover td {
+        background: rgba(105, 190, 40, 0.03);
+      }
+      .cost-table .total-row td {
+        background: rgba(105, 190, 40, 0.08);
+        font-weight: 800;
+        color: var(--kawasaki);
+        font-size: 14px;
+      }
+
+      /* ===== SECTION TITLE ===== */
+      .section-title {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .section-title .bar {
+        width: 4px;
+        height: 28px;
+        background: var(--kawasaki);
+        border-radius: 2px;
+      }
+      .section-title h2 {
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .section-title p {
+        font-size: 12px;
+        color: var(--gray);
+        margin-left: auto;
+      }
+
+      /* ===== NOTES ===== */
+      .note-box {
+        background: rgba(59, 130, 246, 0.08);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-left: 3px solid var(--pro);
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .note-box i {
+        color: var(--pro);
+        font-size: 16px;
+        margin-top: 2px;
+      }
+      .note-box-content h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--pro);
+      }
+      .note-box-content p {
+        font-size: 12px;
+        color: var(--gray);
+        line-height: 1.6;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        .devops-tabs {
+          overflow-x: auto;
+        }
+        .devops-tab {
+          white-space: nowrap;
+        }
+        .arch-layer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .arch-layer-label {
+          min-width: auto;
+        }
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ===== ANIMATIONS ===== */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .page.active > * {
+        animation: fadeIn 0.5s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOOLBAR -->
+    <div class="devops-toolbar">
+      <div class="devops-toolbar-inner">
+        <div class="devops-brand">
+          <div class="devops-brand-icon"><i class="fas fa-server"></i></div>
+          <div class="devops-brand-text">
+            <h3>VATC DEVOPS</h3>
+            <p>BACKEND ARCHITECTURE</p>
+          </div>
+        </div>
+        <div class="devops-tabs">
+          <button class="devops-tab active" onclick="showPage('arch')">
+            <span class="dot"></span> Architecture
+          </button>
+          <button class="devops-tab" onclick="showPage('rec')">
+            <span class="dot"></span> 10 Kategori
+          </button>
+          <button class="devops-tab" onclick="showPage('stack')">
+            <span class="dot"></span> VATC Stack
+          </button>
+          <button class="devops-tab" onclick="showPage('cost')">
+            <span class="dot"></span> Kos
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PAGE 1: ARCHITECTURE           -->
+    <!-- ============================== -->
+    <div class="page active" id="page-arch">
+      <div class="container">
+        <div class="page-header">
+          <div class="kicker">SYSTEM ARCHITECTURE</div>
+          <h1>Backend Architecture <span class="accent">Wireframe</span></h1>
+          <p>
+            Pelangan holistik backend VATC Portal — dari client (landing,
+            registration, member, admin) melalui CDN, API gateway, serverless
+            functions, database, queue, hingga observability. Semua komponen
+            menggunakan tier percuma atau murah.
+          </p>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="arch-diagram">
+          <div class="arch-diagram-label">LIVE ARCHITECTURE</div>
+          <div class="arch-title">
+            <i class="fas fa-project-diagram"></i> End-to-End Flow
+          </div>
+
+          <div class="arch-flow">
+            <!-- Layer 1: Clients -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">CLIENTS</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-globe"></i> Landing Page
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-user-plus"></i> Registration
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-id-card"></i> Member Portal
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-shield-alt"></i> Admin Console
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-mobile-alt"></i> Mobile App (v2)
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+
+            <!-- Layer 2: Edge -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">EDGE / CDN</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-cloud"></i> Cloudflare CDN
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-shield-alt"></i> WAF + DDoS
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-tachometer-alt"></i> Cache Tier
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-balance-scale"></i> Load Balancer
+                  <span class="tier tier-free">FREE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+
+            <!-- Layer 3: API Gateway -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">API GATEWAY</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-bolt"></i> Cloudflare Workers
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-lock"></i> Auth (JWT + OAuth)
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-stopwatch"></i> Rate Limiter
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-route"></i> Routing + CORS
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+
+            <!-- Layer 4: Microservices -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">MICROSERVICES</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-user"></i> Auth Service
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-id-badge"></i> Member Service
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-calendar-check"></i> Event Service
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-credit-card"></i> Payment Service
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-bullhorn"></i> Notification Service
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-image"></i> Media Service
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-connector">
+              <i class="fas fa-arrows-alt-h"></i>
+            </div>
+
+            <!-- Layer 5: Data -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">DATA LAYER</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-database"></i> Supabase Postgres
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-bolt"></i> Upstash Redis
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-box"></i> Cloudflare R2
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-stream"></i> Cloudflare Queues
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-search"></i> Tinybird / Meilisearch
+                  <span class="tier tier-cheap">$</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+
+            <!-- Layer 6: Observability -->
+            <div class="arch-layer">
+              <div class="arch-layer-label">OBSERVABILITY</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-chart-line"></i> Grafana Cloud
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-bug"></i> Sentry
+                  <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-exclamation-triangle"></i> Better Stack
+                  Uptime <span class="tier tier-free">FREE</span>
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-scroll"></i> Logflare / Axiom
+                  <span class="tier tier-free">FREE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Request Flow -->
+        <div class="arch-diagram">
+          <div class="arch-diagram-label">REQUEST FLOW</div>
+          <div class="arch-title">
+            <i class="fas fa-route"></i> Contoh: Pendaftaran Ahli Baharu
+          </div>
+
+          <div class="arch-flow">
+            <div class="arch-layer">
+              <div class="arch-layer-label">1. REQUEST</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-paper-plane"></i> POST /api/register
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer">
+              <div class="arch-layer-label">2. EDGE</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-shield-alt"></i> Cloudflare WAF check
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-stopwatch"></i> Rate limit (5 req/min)
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer">
+              <div class="arch-layer-label">3. AUTH</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-key"></i> Validate payload
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-user-check"></i> Check duplicate email
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer">
+              <div class="arch-layer-label">4. PROCESS</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-credit-card"></i> ToyyibPay callback
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-id-card"></i> Generate member ID
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-qrcode"></i> Generate QR code
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer">
+              <div class="arch-layer-label">5. PERSIST</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-database"></i> Insert to Postgres
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-box"></i> Upload photo to R2
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-stream"></i> Queue welcome email
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer">
+              <div class="arch-layer-label">6. RESPOND</div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  <i class="fas fa-check-circle"></i> 201 Created
+                </div>
+                <div class="arch-item">
+                  <i class="fas fa-chart-line"></i> Log to Grafana
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <i class="fas fa-lightbulb"></i>
+          <div class="note-box-content">
+            <h4>Kenapa Cloudflare sebagai tulang belakang?</h4>
+            <p>
+              Cloudflare menawarkan suite lengkap (CDN, Workers, R2, KV, D1,
+              Queues, Rate Limiting) dengan
+              <strong>tier percuma yang sangat generous</strong>. Untuk VATC
+              dengan ~250 ahli dan trafik sederhana, keseluruhan stack boleh
+              beroperasi <strong>hampir percuma</strong> selama bertahun-tahun
+              sebelum perlu upgrade.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PAGE 2: 10 KATEGORI            -->
+    <!-- ============================== -->
+    <div class="page" id="page-rec">
+      <div class="container">
+        <div class="page-header">
+          <div class="kicker">10 INFRASTRUCTURE CATEGORIES</div>
+          <h1>Cadangan <span class="accent">Percuma & Murah</span></h1>
+          <p>
+            Setiap kategori disenaraikan dengan 2-3 pilihan terbaik. Pilihan
+            utama (★) adalah yang paling sesuai untuk VATC berdasarkan kos,
+            kemudahan integrasi, dan skala semasa (~250 ahli).
+          </p>
+        </div>
+
+        <div class="categories-grid">
+          <!-- 1. Object Storage -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">1</div>
+              <div class="cat-title">
+                <h3>Object Storage</h3>
+                <p>Simpan gambar ahli, kad digital, dokumen</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-cloud" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare R2</div>
+                    <div class="rec-desc">
+                      S3-compatible, 10GB free,
+                      <strong>zero egress fees</strong>. Sesuai untuk gambar
+                      galeri & kad digital.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 10GB</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-hard-drive" style="color: #10a3e6"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Backblaze B2</div>
+                    <div class="rec-desc">
+                      10GB free, murah untuk storage besar. Egress ~$0.01/GB.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 10GB</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-database" style="color: #3ecf8e"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Supabase Storage</div>
+                    <div class="rec-desc">
+                      Integrated dengan Postgres. 1GB free, mudah untuk
+                      auth-based access.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 1GB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. CDN -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">2</div>
+              <div class="cat-title">
+                <h3>CDN</h3>
+                <p>Accelerate static assets global</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-cloud" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare CDN</div>
+                    <div class="rec-desc">
+                      300+ lokasi edge, unlimited bandwidth, auto-minify,
+                      HTTP/3. <strong>Industri standard.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-globe" style="color: #00aaff"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Vercel Edge Network</div>
+                    <div class="rec-desc">
+                      Auto-deploy dari Git, built-in CDN. Sesuai jika host di
+                      Vercel.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #ff385c"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">BunnyCDN</div>
+                    <div class="rec-desc">
+                      Paling murah untuk volume besar. $0.01/GB storage,
+                      $0.005/GB egress.
+                    </div>
+                  </div>
+                  <span class="rec-price price-cheap">~$1/bln</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Caching -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">3</div>
+              <div class="cat-title">
+                <h3>Caching</h3>
+                <p>Kurangkan DB load, percepat response</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #dc382c"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Upstash Redis</div>
+                    <div class="rec-desc">
+                      Serverless Redis, 10K commands/day free. Ideal untuk
+                      session, rate limit, hot data.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 10K/d</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-cloud" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare KV / Cache</div>
+                    <div class="rec-desc">
+                      Edge cache + KV storage. 100K reads/day free, latency <
+                      50ms global.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-server" style="color: #dc382c"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Redis Cloud</div>
+                    <div class="rec-desc">
+                      30MB free managed Redis. Sesuai untuk small-scale caching.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 30MB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Serverless -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">4</div>
+              <div class="cat-title">
+                <h3>Serverless</h3>
+                <p>Backend API tanpa urus server</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare Workers</div>
+                    <div class="rec-desc">
+                      100K requests/day free, V8 isolates, global edge.
+                      <strong>Paling jimat untuk VATC.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 100K/d</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-triangle" style="color: #000"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Vercel Functions</div>
+                    <div class="rec-desc">
+                      100GB-hrs free, auto-deploy dari Git. Sesuai untuk Next.js
+                      stack.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-layer-group" style="color: #3ecf8e"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Supabase Edge Functions</div>
+                    <div class="rec-desc">
+                      Deno-based, integrated dengan Postgres Auth. 500K
+                      invocations free.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 500K</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Load Balancing -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">5</div>
+              <div class="cat-title">
+                <h3>Load Balancing</h3>
+                <p>Agihkan trafik antara instances</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-cloud" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare Load Balancer</div>
+                    <div class="rec-desc">
+                      Built-in dengan CDN. Health checks, geo-routing, failover
+                      auto.
+                    </div>
+                  </div>
+                  <span class="rec-price price-cheap">$5/bln</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-balance-scale" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare (Free Tier)</div>
+                    <div class="rec-desc">
+                      Untuk serverless (Workers/R2), load balancing
+                      <strong>sudah percuma</strong> — auto-handled.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-server" style="color: #009639"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Nginx + Coolify</div>
+                    <div class="rec-desc">
+                      Self-host di VPS $5/bln (Hetzner). Sesuai jika perlukan
+                      full control.
+                    </div>
+                  </div>
+                  <span class="rec-price price-cheap">$5/bln</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Database Scaling -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">6</div>
+              <div class="cat-title">
+                <h3>Database Scaling</h3>
+                <p>Relational DB + read replicas</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-database" style="color: #3ecf8e"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Supabase (Postgres)</div>
+                    <div class="rec-desc">
+                      500MB free, auto-backup, realtime, row-level security.
+                      <strong>All-in-one.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 500MB</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-database" style="color: #ff3366"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Neon (Serverless Postgres)</div>
+                    <div class="rec-desc">
+                      0.5GB free, auto-scale, branching. Branching sesuai untuk
+                      dev/test.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 0.5GB</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-database" style="color: #ff5100"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Turso (libSQL Edge)</div>
+                    <div class="rec-desc">
+                      SQLite di edge, 9GB free, read replicas global. Ultra-fast
+                      reads.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 9GB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Queue -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">7</div>
+              <div class="cat-title">
+                <h3>Queue</h3>
+                <p>Async jobs: email, QR generation, payment</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-stream" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare Queues</div>
+                    <div class="rec-desc">
+                      1M messages/month free. Integrated dengan Workers. Ideal
+                      untuk VATC stack.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 1M/bln</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #dc382c"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Upstash Queue</div>
+                    <div class="rec-desc">
+                      Serverless queue built on Redis. 10K commands free. Mudah
+                      integrate.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 10K/d</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #ff9900"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Inngest</div>
+                    <div class="rec-desc">
+                      Event-driven functions, retries, cron. 50K events free. DX
+                      terbaik.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 50K</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Rate Limiting -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">8</div>
+              <div class="cat-title">
+                <h3>Rate Limiting</h3>
+                <p>Cegah abuse, spam, brute force</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-shield-alt" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare Rate Limiting</div>
+                    <div class="rec-desc">
+                      Edge-based, 100 rules free. Block by IP, path, header.
+                      <strong>Zero config.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-bolt" style="color: #dc382c"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Upstash Rate Limit</div>
+                    <div class="rec-desc">
+                      Token bucket algo, 10K free. Sesuai untuk API-level rate
+                      limit per user.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 10K/d</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-code" style="color: #69be28"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Workers + KV (Custom)</div>
+                    <div class="rec-desc">
+                      Implement sendiri guna KV store. Flexible, zero cost, full
+                      control.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. Microservices -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">9</div>
+              <div class="cat-title">
+                <h3>Microservices</h3>
+                <p>Modular, independent services</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-puzzle-piece" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Cloudflare Workers (Modular)</div>
+                    <div class="rec-desc">
+                      1 worker = 1 service. Deploy independently.
+                      <strong>Monorepo + Turborepo.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-cubes" style="color: #3ecf8e"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Supabase (BaaS)</div>
+                    <div class="rec-desc">
+                      Auth + DB + Storage + Realtime = 4 services in 1. Kurang
+                      complexity.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-cube" style="color: #2496ed"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Docker + Coolify</div>
+                    <div class="rec-desc">
+                      Self-host di VPS $5. Full control, sesuai jika team DevOps
+                      berpengalaman.
+                    </div>
+                  </div>
+                  <span class="rec-price price-cheap">$5/bln</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10. Observability -->
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num">10</div>
+              <div class="cat-title">
+                <h3>Observability</h3>
+                <p>Logs, metrics, traces, uptime</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec rec-pick">
+                  <div class="rec-icon">
+                    <i class="fas fa-chart-line" style="color: #f48120"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Grafana Cloud</div>
+                    <div class="rec-desc">
+                      Metrics + Logs + Traces. 10K series, 50GB logs free.
+                      <strong>Industry standard.</strong>
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-bug" style="color: #362d59"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Sentry</div>
+                    <div class="rec-desc">
+                      Error tracking + performance. 5K errors/month free.
+                      Critical untuk debugging.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 5K</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-icon">
+                    <i class="fas fa-heartbeat" style="color: #22c55e"></i>
+                  </div>
+                  <div class="rec-info">
+                    <div class="rec-name">Better Stack Uptime</div>
+                    <div class="rec-desc">
+                      Uptime monitoring + status page. 5 monitors free.
+                      SMS/Email alert.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE 5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <i class="fas fa-info-circle"></i>
+          <div class="note-box-content">
+            <h4>Legenda Harga</h4>
+            <p>
+              <span
+                class="rec-price price-free"
+                style="display: inline-block; margin: 0 4px"
+                >FREE</span
+              >
+              = Tier percuma yang mencukupi untuk VATC (~250 ahli).
+              <span
+                class="rec-price price-cheap"
+                style="display: inline-block; margin: 0 4px"
+                >$</span
+              >
+              = Kurang dari RM30/bulan.
+              <span
+                class="rec-price price-pro"
+                style="display: inline-block; margin: 0 4px"
+                >$$</span
+              >
+              = RM30-150/bulan (scale phase).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PAGE 3: VATC STACK             -->
+    <!-- ============================== -->
+    <div class="page" id="page-stack">
+      <div class="container">
+        <div class="page-header">
+          <div class="kicker">RECOMMENDED STACK</div>
+          <h1>VATC <span class="accent">DevOps Stack</span></h1>
+          <p>
+            Stack cadangan khusus untuk VATC Malaysia — cohesive, minimal cost,
+            easy to maintain. Semua komponen saling integrate dengan baik.
+          </p>
+        </div>
+
+        <!-- VATC Stack Card -->
+        <div class="vatc-stack">
+          <div class="vatc-stack-header">
+            <div class="vatc-stack-badge"><i class="fas fa-star"></i></div>
+            <div>
+              <h2>Cloudflare + Supabase Stack</h2>
+              <p>
+                Full-stack percuma untuk 0-10,000 ahli. Zero server management.
+              </p>
+            </div>
+          </div>
+          <div class="vatc-stack-grid">
+            <div class="stack-item">
+              <div class="stack-item-label">CDN + WAF</div>
+              <div class="stack-item-name">Cloudflare</div>
+              <div class="stack-item-cost">FREE</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">SERVERLESS API</div>
+              <div class="stack-item-name">Cloudflare Workers</div>
+              <div class="stack-item-cost">FREE 100K req/d</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">OBJECT STORAGE</div>
+              <div class="stack-item-name">Cloudflare R2</div>
+              <div class="stack-item-cost">FREE 10GB</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">CACHE / KV</div>
+              <div class="stack-item-name">Cloudflare KV</div>
+              <div class="stack-item-cost">FREE 100K reads/d</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">DATABASE</div>
+              <div class="stack-item-name">Supabase Postgres</div>
+              <div class="stack-item-cost">FREE 500MB</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">AUTH</div>
+              <div class="stack-item-name">Supabase Auth</div>
+              <div class="stack-item-cost">FREE 50K MAU</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">QUEUE</div>
+              <div class="stack-item-name">Cloudflare Queues</div>
+              <div class="stack-item-cost">FREE 1M msg/bln</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">RATE LIMIT</div>
+              <div class="stack-item-name">Cloudflare Rules</div>
+              <div class="stack-item-cost">FREE</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">LOAD BALANCER</div>
+              <div class="stack-item-name">Cloudflare Auto</div>
+              <div class="stack-item-cost">FREE</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">METRICS</div>
+              <div class="stack-item-name">Grafana Cloud</div>
+              <div class="stack-item-cost">FREE</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">ERROR TRACKING</div>
+              <div class="stack-item-name">Sentry</div>
+              <div class="stack-item-cost">FREE 5K/bln</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">UPTIME</div>
+              <div class="stack-item-name">Better Stack</div>
+              <div class="stack-item-cost">FREE 5 monitors</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">FRONTEND HOST</div>
+              <div class="stack-item-name">Cloudflare Pages</div>
+              <div class="stack-item-cost">FREE</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">EMAIL</div>
+              <div class="stack-item-name">Resend</div>
+              <div class="stack-item-cost">FREE 3K/bln</div>
+            </div>
+            <div class="stack-item">
+              <div class="stack-item-label">PAYMENT</div>
+              <div class="stack-item-name">ToyyibPay</div>
+              <div class="stack-item-cost">~1% per tx</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Why this stack -->
+        <div class="arch-diagram">
+          <div class="arch-diagram-label">KENAPA STACK INI?</div>
+          <div class="arch-title">
+            <i class="fas fa-check-circle"></i> Kelebihan untuk VATC
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 16px;
+            "
+          >
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i
+                  class="fas fa-dollar-sign"
+                  style="color: var(--kawasaki)"
+                ></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Kos Hampir RM0</div>
+                <div class="rec-desc">
+                  Seluruh stack percuma untuk 250 ahli. Hanya bayar bila scale
+                  ke 10K+.
+                </div>
+              </div>
+            </div>
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i
+                  class="fas fa-tachometer-alt"
+                  style="color: var(--kawasaki)"
+                ></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Performance Tinggi</div>
+                <div class="rec-desc">
+                  Edge computing global, latency < 50ms dari mana-mana negara.
+                </div>
+              </div>
+            </div>
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i
+                  class="fas fa-expand-arrows-alt"
+                  style="color: var(--kawasaki)"
+                ></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Scale Mudah</div>
+                <div class="rec-desc">
+                  Dari 250 → 25,000 ahli tanpa tukar architecture.
+                  Pay-as-you-grow.
+                </div>
+              </div>
+            </div>
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i class="fas fa-shield-alt" style="color: var(--kawasaki)"></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Enterprise Security</div>
+                <div class="rec-desc">
+                  DDoS protection, WAF, SSL auto, SOC 2 compliant providers.
+                </div>
+              </div>
+            </div>
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i
+                  class="fas fa-code-branch"
+                  style="color: var(--kawasaki)"
+                ></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Dev Friendly</div>
+                <div class="rec-desc">
+                  Git-based deploy, preview environments, TypeScript native.
+                </div>
+              </div>
+            </div>
+            <div class="rec" style="background: var(--dark-3)">
+              <div class="rec-icon">
+                <i class="fas fa-tools" style="color: var(--kawasaki)"></i>
+              </div>
+              <div class="rec-info">
+                <div class="rec-name">Minimal Ops</div>
+                <div class="rec-desc">
+                  Zero server, zero DBA, zero DevOps team needed. Focus on
+                  product.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Migration Path -->
+        <div class="arch-diagram">
+          <div class="arch-diagram-label">SCALE ROADMAP</div>
+          <div class="arch-title">
+            <i class="fas fa-chart-line"></i> Bila Perlu Upgrade?
+          </div>
+          <div class="arch-flow">
+            <div
+              class="arch-layer"
+              style="border-left: 3px solid var(--kawasaki)"
+            >
+              <div class="arch-layer-label">
+                PHASE 1<br /><span style="font-size: 8px; color: var(--gray)"
+                  >0-1K ahli</span
+                >
+              </div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  Free Tier sahaja <span class="tier tier-free">RM0</span>
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer" style="border-left: 3px solid var(--cheap)">
+              <div class="arch-layer-label">
+                PHASE 2<br /><span style="font-size: 8px; color: var(--gray)"
+                  >1K-5K ahli</span
+                >
+              </div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  Workers Paid <span class="tier tier-cheap">$5</span>
+                </div>
+                <div class="arch-item">
+                  Supabase Pro <span class="tier tier-cheap">$25</span>
+                </div>
+                <div class="arch-item">
+                  R2 100GB <span class="tier tier-cheap">$2</span>
+                </div>
+              </div>
+            </div>
+            <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+            <div class="arch-layer" style="border-left: 3px solid var(--pro)">
+              <div class="arch-layer-label">
+                PHASE 3<br /><span style="font-size: 8px; color: var(--gray)"
+                  >5K-50K ahli</span
+                >
+              </div>
+              <div class="arch-layer-items">
+                <div class="arch-item">
+                  Supabase Team <span class="tier tier-pro">$599</span>
+                </div>
+                <div class="arch-item">Dedicated DB</div>
+                <div class="arch-item">Multi-region</div>
+                <div class="arch-item">Premium Support</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <i class="fas fa-rocket"></i>
+          <div class="note-box-content">
+            <h4>Quick Start Checklist</h4>
+            <p>
+              1. Daftar akaun Cloudflare (domain + Workers + R2) → 2. Daftar
+              Supabase (Postgres + Auth) → 3. Setup Grafana Cloud + Sentry → 4.
+              Deploy frontend ke Cloudflare Pages → 5. Setup CI/CD via GitHub
+              Actions (percuma). <strong>Total setup time: ~2 jam.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PAGE 4: COST                   -->
+    <!-- ============================== -->
+    <div class="page" id="page-cost">
+      <div class="container">
+        <div class="page-header">
+          <div class="kicker">COST ANALYSIS</div>
+          <h1>Kos <span class="accent">Bulanan</span> VATC</h1>
+          <p>
+            Anggaran kos bulanan berdasarkan 3 senario: permulaan (250 ahli),
+            pertengahan (2,500 ahli), dan skala penuh (25,000 ahli).
+          </p>
+        </div>
+
+        <!-- Cost Summary -->
+        <div class="cost-summary">
+          <div class="cost-card highlight">
+            <div class="cost-card-label">PHASE 1 (250 ahli)</div>
+            <div class="cost-card-value">RM 0</div>
+            <div class="cost-card-sub">100% Free Tier</div>
+          </div>
+          <div class="cost-card">
+            <div class="cost-card-label">PHASE 2 (2,500 ahli)</div>
+            <div class="cost-card-value">~RM 150</div>
+            <div class="cost-card-sub">$32 USD/bulan</div>
+          </div>
+          <div class="cost-card">
+            <div class="cost-card-label">PHASE 3 (25K ahli)</div>
+            <div class="cost-card-value">~RM 3,000</div>
+            <div class="cost-card-sub">~$650 USD/bulan</div>
+          </div>
+          <div class="cost-card">
+            <div class="cost-card-label">KOS PER AHLI</div>
+            <div class="cost-card-value">RM 0.12</div>
+            <div class="cost-card-sub">Phase 2 / bulan</div>
+          </div>
+        </div>
+
+        <!-- Detailed Breakdown -->
+        <div class="section-title">
+          <div class="bar"></div>
+          <h2>Pecahan Kos Terperinci</h2>
+          <p>Phase 1 (250 ahli)</p>
+        </div>
+
+        <div class="cost-table-wrap" style="margin-bottom: 32px">
+          <table class="cost-table">
+            <thead>
+              <tr>
+                <th>Kategori</th>
+                <th>Perkhidmatan</th>
+                <th>Tier Percuma</th>
+                <th>Usage VATC</th>
+                <th>Kos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CDN</strong></td>
+                <td>Cloudflare</td>
+                <td>Unlimited</td>
+                <td>~50GB/bln</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Object Storage</strong></td>
+                <td>Cloudflare R2</td>
+                <td>10GB + 1M Class B</td>
+                <td>~3GB + 50K ops</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Serverless</strong></td>
+                <td>Cloudflare Workers</td>
+                <td>100K req/day</td>
+                <td>~30K req/day</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Database</strong></td>
+                <td>Supabase Postgres</td>
+                <td>500MB + 5GB transfer</td>
+                <td>~100MB + 1GB</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Cache</strong></td>
+                <td>Cloudflare KV</td>
+                <td>100K reads/day</td>
+                <td>~20K reads/day</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Queue</strong></td>
+                <td>Cloudflare Queues</td>
+                <td>1M messages/month</td>
+                <td>~50K msg/bln</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Rate Limiting</strong></td>
+                <td>Cloudflare Rules</td>
+                <td>Unlimited</td>
+                <td>Standard</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Load Balancing</strong></td>
+                <td>Cloudflare Auto</td>
+                <td>Built-in</td>
+                <td>Auto</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Observability</strong></td>
+                <td>Grafana + Sentry + Better Stack</td>
+                <td>Free tiers</td>
+                <td>Within limits</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Email</strong></td>
+                <td>Resend</td>
+                <td>3,000/month</td>
+                <td>~500 email/bln</td>
+                <td style="color: var(--kawasaki); font-weight: 700">RM 0</td>
+              </tr>
+              <tr>
+                <td><strong>Domain</strong></td>
+                <td>Cloudflare Registrar</td>
+                <td>—</td>
+                <td>1 domain</td>
+                <td style="color: var(--cheap); font-weight: 700">
+                  ~RM 50/thn
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Payment Gateway</strong></td>
+                <td>ToyyibPay</td>
+                <td>—</td>
+                <td>~50 tx/bln</td>
+                <td style="color: var(--cheap); font-weight: 700">~RM 50</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="4"><strong>JUMLAH BULANAN (Phase 1)</strong></td>
+                <td><strong>~RM 50</strong> (hanya payment fees + domain)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Phase 2 Comparison -->
+        <div class="section-title">
+          <div class="bar"></div>
+          <h2>Perbandingan 3 Phase</h2>
+          <p>Skala kos vs pertumbuhan</p>
+        </div>
+
+        <div class="cost-table-wrap" style="margin-bottom: 32px">
+          <table class="cost-table">
+            <thead>
+              <tr>
+                <th>Komponen</th>
+                <th>Phase 1 (250)</th>
+                <th>Phase 2 (2,500)</th>
+                <th>Phase 3 (25,000)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cloudflare (CDN + Workers + R2)</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--cheap)">~RM 35</td>
+                <td style="color: var(--pro)">~RM 250</td>
+              </tr>
+              <tr>
+                <td>Supabase (DB + Auth)</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--cheap)">~RM 115</td>
+                <td style="color: var(--pro)">~RM 2,800</td>
+              </tr>
+              <tr>
+                <td>Observability (Grafana + Sentry)</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--cheap)">~RM 120</td>
+              </tr>
+              <tr>
+                <td>Email (Resend)</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--kawasaki)">RM 0</td>
+                <td style="color: var(--cheap)">~RM 90</td>
+              </tr>
+              <tr>
+                <td>Domain + Misc</td>
+                <td style="color: var(--cheap)">~RM 5</td>
+                <td style="color: var(--cheap)">~RM 10</td>
+                <td style="color: var(--cheap)">~RM 50</td>
+              </tr>
+              <tr class="total-row">
+                <td><strong>JUMLAH / BULAN</strong></td>
+                <td><strong>~RM 5</strong></td>
+                <td><strong>~RM 160</strong></td>
+                <td><strong>~RM 3,310</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Kos per Ahli / Bulan</strong></td>
+                <td style="color: var(--kawasaki)">RM 0.02</td>
+                <td style="color: var(--kawasaki)">RM 0.06</td>
+                <td style="color: var(--cheap)">RM 0.13</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          <i class="fas fa-piggy-bank"></i>
+          <div class="note-box-content">
+            <h4>Pengurusan Yuran vs Kos Infrastruktur</h4>
+            <p>
+              Dengan yuran keahlian <strong>RM 100 (Asas)</strong> atau
+              <strong>RM 180 (Premium)</strong> dan 250 ahli, pendapatan tahunan
+              = <strong>RM 25,000 - RM 45,000</strong>. Kos infrastruktur Phase
+              1 = <strong>~RM 60/tahun</strong>. Ini bermakna
+              <strong>99.7% yuran boleh digunakan untuk aktiviti kelab</strong>,
+              bukan hosting!
+            </p>
+          </div>
+        </div>
+
+        <!-- Alternatives -->
+        <div class="section-title" style="margin-top: 40px">
+          <div class="bar"></div>
+          <h2>Alternatif Stack</h2>
+          <p>Jika perlukan pilihan lain</p>
+        </div>
+
+        <div
+          class="categories-grid"
+          style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))"
+        >
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num" style="background: var(--pro)">A</div>
+              <div class="cat-title">
+                <h3>Vercel + Supabase</h3>
+                <p>Untuk Next.js / React stack</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Vercel (Frontend + Functions)</div>
+                    <div class="rec-desc">
+                      Hobby tier free, auto-deploy dari Git.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Supabase (Backend)</div>
+                    <div class="rec-desc">DB + Auth + Storage + Realtime.</div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Upstash (Redis + Queue)</div>
+                    <div class="rec-desc">Caching & async jobs.</div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+              </div>
+              <div
+                style="
+                  margin-top: 12px;
+                  padding: 10px;
+                  background: rgba(59, 130, 246, 0.08);
+                  border-radius: 6px;
+                  font-size: 11px;
+                  color: var(--pro);
+                "
+              >
+                <strong>Kos Phase 1:</strong> RM 0 |
+                <strong>Kelebihan:</strong> DX terbaik untuk React devs
+              </div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num" style="background: var(--cheap)">B</div>
+              <div class="cat-title">
+                <h3>Self-Host (VPS)</h3>
+                <p>Full control, lebih complex</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Hetzner VPS (CX22)</div>
+                    <div class="rec-desc">2 vCPU, 4GB RAM, 40GB SSD.</div>
+                  </div>
+                  <span class="rec-price price-cheap">~RM 25/bln</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Coolify</div>
+                    <div class="rec-desc">
+                      Self-hosted PaaS, Heroku alternative.
+                    </div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Docker + Postgres + Redis</div>
+                    <div class="rec-desc">Full stack dalam 1 VPS.</div>
+                  </div>
+                  <span class="rec-price price-cheap">included</span>
+                </div>
+              </div>
+              <div
+                style="
+                  margin-top: 12px;
+                  padding: 10px;
+                  background: rgba(245, 158, 11, 0.08);
+                  border-radius: 6px;
+                  font-size: 11px;
+                  color: var(--cheap);
+                "
+              >
+                <strong>Kos Phase 1:</strong> ~RM 25/bln |
+                <strong>Kelebihan:</strong> Full control, data sovereignty
+              </div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header">
+              <div class="cat-num" style="background: var(--enterprise)">C</div>
+              <div class="cat-title">
+                <h3>AWS Free Tier</h3>
+                <p>Enterprise, 12 bulan free</p>
+              </div>
+            </div>
+            <div class="cat-body">
+              <div class="rec-list">
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">Lambda + API Gateway</div>
+                    <div class="rec-desc">1M req free, 12 bulan.</div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">RDS + S3 + CloudFront</div>
+                    <div class="rec-desc">DB + Storage + CDN.</div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+                <div class="rec">
+                  <div class="rec-info">
+                    <div class="rec-name">SQS + CloudWatch</div>
+                    <div class="rec-desc">Queue + monitoring.</div>
+                  </div>
+                  <span class="rec-price price-free">FREE</span>
+                </div>
+              </div>
+              <div
+                style="
+                  margin-top: 12px;
+                  padding: 10px;
+                  background: rgba(139, 92, 246, 0.08);
+                  border-radius: 6px;
+                  font-size: 11px;
+                  color: var(--enterprise);
+                "
+              >
+                <strong>Kos Phase 1:</strong> RM 0 (12 bulan) |
+                <strong>Amaran:</strong> Kos melonjak selepas tahun pertama
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div class="note-box-content">
+            <h4>Cadangan Akhir</h4>
+            <p>
+              Untuk VATC Malaysia dengan bajet terhad dan pasukan kecil,
+              <strong>Cloudflare + Supabase stack</strong> adalah pilihan
+              terbaik. Ia menawarkan keseimbangan sempurna antara
+              <strong>kos (hampir percuma)</strong>,
+              <strong>performance (edge global)</strong>,
+              <strong>scalability (auto-scale)</strong>, dan
+              <strong>ease of use (zero ops)</strong>. Mulakan dengan Phase 1,
+              upgrade ke Phase 2 hanya bila benar-benar perlu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showPage(id) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + id).classList.add("active");
+        document
+          .querySelectorAll(".devops-tab")
+          .forEach((t) => t.classList.remove("active"));
+        const tabs = document.querySelectorAll(".devops-tab");
+        const map = { arch: 0, rec: 1, stack: 2, cost: 3 };
+        tabs[map[id]].classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    </script>
+  </body>
+</html>
